@@ -1,0 +1,124 @@
+﻿@model mvcCACSLA.Models.Login
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<div class="modal_fundamentacion" style="display: none">
+    <div class="text-center">
+        <img alt="" src=~/Content/imagenes/ajax-loader.gif />
+    </div>
+</div>*@
+
+<br>
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="form-login">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"></h3>
+                    </div>
+                    <div class="panel-body">
+                        @using (Html.BeginForm("Login", "Login", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "Login Incorrecto!. Verifica tus datos.");
+                            <div>
+                                <fieldset>
+                                    <legend>Login</legend>
+                                    <div class="editor-label">
+                                        @Html.LabelFor(u => u.Usuario)
+                                    </div>
+                                    <div class="editor-field">
+                                        @Html.TextBoxFor(u => u.Usuario)
+                                        @Html.ValidationMessageFor(u => u.Usuario, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="editor-label">
+                                        @Html.LabelFor(u => u.Password)
+                                    </div>
+                                    <div class="editor-field">
+                                        @Html.PasswordFor(u => u.Password)
+                                        @Html.ValidationMessageFor(u => u.Password, "", new { @class = "text-danger" })
+                                    </div>
+                                    <br />
+                                    <input id="btnLogin" type="submit" value="Iniciar Sesión" class="btn btn-primary btn-block" />
+                                </fieldset>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@Scripts.Render("~/bundles/jquery")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#btnLogin").on("click", function (e) {
+            e.preventDefault();
+            var model = {
+                Usuario: $('#Usuario').val(),
+                Password: $('#Password').val()
+            };
+
+            $.ajax({
+                type: "POST",
+                data: JSON.stringify(model),
+                url: "/Login/Login",
+                contentType: "application/json",
+                success: function (result) {
+                    if (result.success) {
+                        window.location = "/Home/Index";
+
+                    } else {
+                        alert("Usuario y/o Password Incorrecto");
+                        
+                    }
+                }
+            });
+
+        });
+
+    });
+    //function cargarCiudad() {
+    //    if (navigator.geolocation) {
+    //        if ("geolocation" in navigator) {
+    //            navigator.geolocation.getCurrentPosition(function (position) {
+    //                latitud = position.coords.latitude;
+    //                longitud = position.coords.longitude;
+    //                $.ajax({
+    //                    dataType: "json",
+    //                    url: "http://nominatim.openstreetmap.org/reverse",
+    //                    type: "get",
+    //                    data: { format: "json", lat: latitud, lon: longitud }
+    //                }).done(function (data) {
+    //                    ciudad = data.address.city;
+    //                    // alert(ciudad);
+    //                    if (ciudad == 'Mexicali') {
+    //                        //$("p").html("asdasdasdasdasdasd");
+
+    //                    }
+    //                    else {
+    //                        //alert('tu puta madre');
+    //                    }
+    //                });
+    //            });
+    //        }
+    //        else {
+    //            alert(' No se cuenta con soporte para geolocalización');
+    //        }
+    //    }
+
+    //}
+
+    //$(document).on("ready", cargarCiudad);
+
+
+</script>
